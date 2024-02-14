@@ -1,0 +1,11 @@
+<resources>
+    <string name="app_name">ChefaTask</string>
+    <string name="search">Search</string>
+    <string name="noCaption">No caption</string>
+    <string name="downloadImage">Do you want to download this image ?</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
+    <string name="width">Width</string>
+    <string name="caption">Caption</string>
+    <string name="submit">Submit</string>
+</resources>

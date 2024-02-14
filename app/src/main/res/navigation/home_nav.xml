@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/home_nav"
+    app:startDestination="@id/homeFragment">
+
+    <fragment
+        android:id="@+id/homeFragment"
+        android:name="com.abdelmageed.chefatask.presentation.home.HomeFragment"
+        android:label="HomeFragment"
+        tools:layout="@layout/fragment_home">
+        <action
+            android:id="@+id/action_homeFragment_to_imageDetails"
+            app:destination="@id/imageDetails" />
+    </fragment>
+    <fragment
+        android:id="@+id/imageDetails"
+        android:name="com.abdelmageed.chefatask.presentation.ImageDetails"
+        android:label="ImageDetails"
+        tools:layout="@layout/fragment_image_details">
+
+        <argument
+            android:name="resultsItem"
+            app:argType="com.abdelmageed.chefatask.data.modules.model.ImagesDtoMapper"
+            app:nullable="true" />
+    </fragment>
+
+
+</navigation>
