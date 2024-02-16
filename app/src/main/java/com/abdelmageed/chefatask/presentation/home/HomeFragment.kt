@@ -83,6 +83,9 @@ class HomeFragment : Fragment() {
                 }
                 if (requireActivity().isOnline())
                     viewModel.getMarvelComics()
+                else
+                    viewModel.getAllMarvelImagesFromDb()
+
             }
         }
     }

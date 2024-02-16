@@ -182,10 +182,10 @@ class ImageDetails : Fragment() {
                         val randomNum = (min..max).random()
                         viewModel.insertImageInDB(
                             MarvelModel(
-                                dbSize, randomNum,
+                                dbSize + 1, dbSize + 1,
                                 byte = byteArray,
                                 ImagesDtoMapper(
-                                    randomNum,
+                                    dbSize + 1,
                                     "",
                                     binding.etCaption.text.toString(),
                                     Date().toString(),
