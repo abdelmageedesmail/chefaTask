@@ -7,9 +7,9 @@ import kotlinx.parcelize.Parcelize
 @Parcelize
 data class ImagesDtoMapper(
     var id: Int? = null,
-    val upc: String? = null,
     val imageUrl: String,
     val title: String,
-    val date: String,
-    val bitmap: Bitmap? = null
+    val date: String? = null,
+    val bitmap: Bitmap? = null,
+    var bufferArray: ByteArray? = null,
 ) : Parcelable

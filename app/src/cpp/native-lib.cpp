@@ -27,3 +27,10 @@ Java_com_abdelmageed_chefatask_data_common_RetrofitModule_getBaseUrl(JNIEnv *env
     std::string baseURL = "https://gateway.marvel.com/v1/";
     return env->NewStringUTF(baseURL.c_str());
 }
+extern "C"
+JNIEXPORT jstring JNICALL
+Java_com_abdelmageed_chefatask_presentation_ImageDetails_getTinifyApiKey(JNIEnv *env,
+                                                                         jobject thiz) {
+    std::string apiKey = "HsCYgVJHV200XTbFRbQd5cSVT6FNyr45";
+    return env->NewStringUTF(apiKey.c_str());
+}

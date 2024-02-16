@@ -15,7 +15,10 @@ data class MarvelModel(
     @ColumnInfo(name = "modelId")
     var modelId: Int? = null,
 
+    @ColumnInfo(name = "byte")
+    var byte: ByteArray? = null,
+
     @TypeConverters(ObjectTypeConverter::class)
     @ColumnInfo(name = "imageDto")
-    var selectedCurrencies: ImagesDtoMapper? = null
+    var imageDtoModel: ImagesDtoMapper? = null
 )

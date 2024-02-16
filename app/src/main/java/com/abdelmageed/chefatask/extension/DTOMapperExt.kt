@@ -9,5 +9,6 @@ fun ResultsItem.toDomain() = ImagesDtoMapper(
     imageUrl = "${thumbnail?.path}.${thumbnail?.extension}",
     title = title ?: "",
     date = modified ?: "",
-    bitmap = null
+    bitmap = null,
+    bufferArray = null
 )

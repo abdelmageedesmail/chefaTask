@@ -72,5 +72,12 @@ class MarvelComicsRepositoryImpl @Inject constructor(
         return marvelDao.getDataById(id)
     }
 
+    override suspend fun updateImage(
+        id: Int?,
+        imagesDtoMapper: ImagesDtoMapper
+    ) {
+        marvelDao.updateItem(id, imagesDtoMapper)
+    }
+
 
 }

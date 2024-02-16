@@ -25,4 +25,8 @@ class GetMarvelComicsUseCase @Inject constructor(private val marvelComicsReposit
     fun getItem(id: Int): MarvelModel? {
         return marvelComicsRepository.getItem(id)
     }
+
+    suspend fun updateImage(id: Int?, imagesDtoMapper: ImagesDtoMapper) {
+        marvelComicsRepository.updateImage(id, imagesDtoMapper)
+    }
 }

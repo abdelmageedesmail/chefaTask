@@ -18,4 +18,6 @@ interface MarvelComicsRepository {
     suspend fun getAllImages(): Flow<List<MarvelModel>>
 
     fun getItem(id: Int): MarvelModel?
+
+    suspend fun updateImage(id: Int?, imagesDtoMapper: ImagesDtoMapper)
 }

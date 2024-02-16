@@ -1,5 +1,6 @@
 package com.abdelmageed.chefatask.presentation.home
 
+import android.util.Base64
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -78,7 +79,7 @@ class HomeViewModel @Inject constructor(
 
     fun insertCurrenciesInDB(marvelModel: MarvelModel) {
         viewModelScope.launch {
-            Log.e("marvelTitle", "${marvelModel.selectedCurrencies?.title}")
+            Log.e("marvelTitle", "${marvelModel.imageDtoModel?.title}")
             marvelComicsUseCase.insertMarvel(marvelModel)
         }
     }
@@ -101,8 +102,10 @@ class HomeViewModel @Inject constructor(
                 showToast(it.message.toString())
             }.collect {
                 val list = mutableListOf<ImagesDtoMapper?>()
+
                 it.map { marvelModel ->
-                    marvelModel.selectedCurrencies?.let { imageDto ->
+                    Log.e("byteArray2", "${marvelModel.byte}")
+                    marvelModel.imageDtoModel?.let { imageDto ->
                         list.add(imageDto)
                     }
                 }
@@ -121,7 +124,5 @@ sealed class HomeFragmentState {
     data class ShowToast(val message: String) : HomeFragmentState()
     data class IsLoading(val isLoading: Boolean) : HomeFragmentState()
     data class IsValueExistInDb(val isExist: Boolean) : HomeFragmentState()
-    class GetAllImagesFromDB(val list: MutableList<ImagesDtoMapper?>) : HomeFragmentState() {
-
-    }
+    class GetAllImagesFromDB(val list: MutableList<ImagesDtoMapper?>) : HomeFragmentState()
 }

@@ -1,5 +1,7 @@
 package com.abdelmageed.chefatask.presentation.home
 
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -55,11 +57,6 @@ class MarvelComicsImagesAdapter(
     inner class JobsViewHolder(val view: View) : RecyclerView.ViewHolder(view) {
         fun bind(image: ImagesDtoMapper) {
             binding.apply {
-                val imageUrl = image.imageUrl.replace(
-                    "http",
-                    "https"
-                )
-                Log.e("imageUrl", "${image.id}")
                 if (image.title.toString().isNotEmpty())
                     tvTitle.text = image.title
                 else
@@ -69,9 +66,16 @@ class MarvelComicsImagesAdapter(
 
                 tvDate.text = df.format(image.date)
 
-                if (image.bitmap != null) {
-                    ivMarvel.setImageBitmap(image.bitmap)
+                if (image.bufferArray != null) {
+                    Log.e("ImageBitmap", "${image.bufferArray}")
+
+                    ivMarvel.setImageBitmap(byteToBitmap(image.bufferArray))
                 } else {
+                    val imageUrl = image.imageUrl.replace(
+                        "http",
+                        "https"
+                    )
+                    Log.e("imageUrl", "${image.id}")
                     ivMarvel.applyImage(imageUrl)
                 }
 
@@ -80,10 +84,21 @@ class MarvelComicsImagesAdapter(
                 }
 
                 ivMarvel.setOnLongClickListener {
+                    val imageUrl = image.imageUrl.replace(
+                        "http",
+                        "https"
+                    )
+                    Log.e("imageUrl", "${image.id}")
                     downloadListener(imageUrl)
-                    true // returning true instead of false, works for me
+                    true
                 }
             }
+        }
+
+
+        private fun byteToBitmap(b: ByteArray?): Bitmap? {
+            return if (b == null || b.size == 0) null else BitmapFactory
+                .decodeByteArray(b, 0, b.size)
         }
     }
 }

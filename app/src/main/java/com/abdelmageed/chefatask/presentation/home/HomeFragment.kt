@@ -2,7 +2,6 @@ package com.abdelmageed.chefatask.presentation.home
 
 import android.app.AlertDialog
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -52,15 +51,19 @@ class HomeFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         if (requireActivity().isOnline())
             viewModel.getMarvelComics()
-        else {
-            binding.swipeRefresh.isRefreshing = false
-            viewModel.getAllMarvelImagesFromDb()
-        }
+
+        viewModel.getAllMarvelImagesFromDb()
         observe()
         binding.apply {
+
             floatingAddImage.setOnClickListener {
-                requireActivity().showToast("add image")
+                findNavController().navigate(
+                    HomeFragmentDirections.actionHomeFragmentToImageDetails(
+                        null
+                    )
+                )
             }
+
             etSearch.doAfterTextChanged {
                 if (it.toString().isNotEmpty()) {
                     val marvels = viewModel.search(it.toString(), marvelList)
@@ -110,39 +113,42 @@ class HomeFragment : Fragment() {
         binding.swipeRefresh.isRefreshing = false
         marvelList = list
         marvelListInDb = list.distinctBy { it?.id }.toMutableList()
-        if (marvelListInDb.isNotEmpty()) {
+        if (!requireActivity().isOnline()) {
 
-            adapter = MarvelComicsImagesAdapter(marvelListInDb, {
-                findNavController().navigate(
-                    HomeFragmentDirections.actionHomeFragmentToImageDetails(
-                        it
+            if (marvelListInDb.isNotEmpty()) {
+
+                adapter = MarvelComicsImagesAdapter(marvelListInDb, {
+                    findNavController().navigate(
+                        HomeFragmentDirections.actionHomeFragmentToImageDetails(
+                            it
+                        )
                     )
-                )
-            }, {
-                AlertDialog.Builder(requireActivity())
-                    .setMessage(getString(R.string.downloadImage))
-                    .setPositiveButton(
-                        getString(R.string.yes)
-                    ) { dialog, _ ->
-                        dialog.dismiss()
-                        requireActivity().downloadImage(it)
-                    }.setNegativeButton(
-                        getString(R.string.no)
-                    ) { dialog, _ ->
-                        dialog.dismiss()
-                    }.show()
-            })
+                }, {
+                    AlertDialog.Builder(requireActivity())
+                        .setMessage(getString(R.string.downloadImage))
+                        .setPositiveButton(
+                            getString(R.string.yes)
+                        ) { dialog, _ ->
+                            dialog.dismiss()
+                            requireActivity().downloadImage(it)
+                        }.setNegativeButton(
+                            getString(R.string.no)
+                        ) { dialog, _ ->
+                            dialog.dismiss()
+                        }.show()
+                })
 
-            binding.apply {
-                rvMarvels.adapter = adapter
-                rvMarvels.layoutManager =
-                    LinearLayoutManager(requireActivity(), LinearLayoutManager.VERTICAL, false)
-                rvMarvels.isNestedScrollingEnabled = false
-                rvMarvels.setItemViewCacheSize(200)
+                binding.apply {
+                    rvMarvels.adapter = adapter
+                    rvMarvels.layoutManager =
+                        LinearLayoutManager(requireActivity(), LinearLayoutManager.VERTICAL, false)
+                    rvMarvels.isNestedScrollingEnabled = false
+                    rvMarvels.setItemViewCacheSize(200)
 
+                }
+            } else {
+                requireActivity().showToast("Cannot fetch data from database")
             }
-        } else {
-            requireActivity().showToast("Cannot fetch data from database")
         }
     }
 
@@ -157,21 +163,23 @@ class HomeFragment : Fragment() {
                 val map = data.map { it!!.toDomain() }
                 marvelList = map.toMutableList()
                 marvelList.map { imageDao ->
-                    Log.e("imageDao", "${imageDao?.id}")
                     imageDao?.id?.let { it1 -> viewModel.getItemFromDb(it1) } ?: false
-                    Log.e("isExistInDB", "$containsValue")
                     if (!containsValue) {
                         val marvelModel = MarvelModel()
-//                        imageDao?.id = marvelModel.id
                         marvelModel.modelId = imageDao?.id
-                        marvelModel.selectedCurrencies = imageDao
+                        marvelModel.imageDtoModel = imageDao
                         viewModel.insertCurrenciesInDB(
                             marvelModel
                         )
                     }
-
                 }
-                adapter = MarvelComicsImagesAdapter(marvelList, {
+                val finalList = if (marvelListInDb.isNotEmpty()) {
+                    marvelList.flatMap { marvelListInDb }.toMutableList()
+                } else {
+                    marvelList
+                }
+                val flatMap = finalList.distinctBy { it?.id }.toMutableList()
+                adapter = MarvelComicsImagesAdapter(flatMap, {
                     findNavController().navigate(
                         HomeFragmentDirections.actionHomeFragmentToImageDetails(
                             it

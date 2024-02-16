@@ -4,30 +4,30 @@
     <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
         android:layout_width="match_parent"
-        android:layoutDirection="ltr"
         android:layout_height="match_parent"
-        android:background="@color/background">
+        android:background="@color/background"
+        android:layoutDirection="ltr">
 
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:elevation="@dimen/_8sdp"
-            app:layout_constraintTop_toTopOf="parent"
-            >
+            app:layout_constraintTop_toTopOf="parent">
 
             <ImageView
                 android:id="@+id/ivBack"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:padding="@dimen/_10sdp"
-                android:background="@drawable/ic_back" />
+                android:background="@drawable/ic_back"
+                android:padding="@dimen/_10sdp" />
         </androidx.appcompat.widget.Toolbar>
 
         <com.google.android.material.card.MaterialCardView
             android:id="@+id/imageCard"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toBottomOf="@+id/bottomGl"
             app:layout_constraintEnd_toEndOf="@id/endGl"
             app:layout_constraintStart_toStartOf="@id/startGl"
             app:layout_constraintTop_toBottomOf="@+id/toolbar">
@@ -110,6 +110,7 @@
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnSubmit"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/_10sdp"
@@ -134,5 +135,12 @@
             android:layout_height="wrap_content"
             android:orientation="vertical"
             app:layout_constraintGuide_end="@dimen/_10sdp" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/bottomGl"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_percent=".42" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

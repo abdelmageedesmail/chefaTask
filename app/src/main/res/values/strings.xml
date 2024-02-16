@@ -8,4 +8,5 @@
     <string name="width">Width</string>
     <string name="caption">Caption</string>
     <string name="submit">Submit</string>
+    <string name="emptyField">Empty Field</string>
 </resources>
