@@ -1,10 +1,14 @@
 package com.abdelmageed.chefatask.presentation.home
 
+import android.Manifest
 import android.app.AlertDialog
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -24,6 +28,7 @@ import com.abdelmageed.chefatask.extension.showToast
 import com.abdelmageed.chefatask.extension.toDomain
 import com.abdelmageed.chefatask.R
 import com.abdelmageed.chefatask.databinding.FragmentHomeBinding
+import com.abdelmageed.chefatask.extension.saveMediaToStorage
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -49,6 +54,7 @@ class HomeFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        requestPermission()
         if (requireActivity().isOnline())
             viewModel.getMarvelComics()
 
@@ -89,6 +95,24 @@ class HomeFragment : Fragment() {
             }
         }
     }
+
+    private fun requestPermission() {
+        if (android.os.Build.VERSION.SDK_INT >= 33) {
+            requestPermissionLauncher.launch(
+                Manifest.permission.READ_MEDIA_IMAGES
+            )
+        } else {
+            requestPermissionLauncher.launch(
+                Manifest.permission.WRITE_EXTERNAL_STORAGE
+            )
+        }
+    }
+
+    private val requestPermissionLauncher =
+        registerForActivityResult(
+            ActivityResultContracts.RequestPermission()
+        ) { _: Boolean ->
+        }
 
     private fun observe() {
         viewModel.state.flowWithLifecycle(
@@ -133,7 +157,19 @@ class HomeFragment : Fragment() {
                             getString(R.string.yes)
                         ) { dialog, _ ->
                             dialog.dismiss()
-                            requireActivity().downloadImage(it)
+                            if (it.imageUrl.isEmpty()) {
+                                byteToBitmap(it.bufferArray)?.let { it1 ->
+                                    requireActivity().saveMediaToStorage(
+                                        it1
+                                    )
+                                }
+                            } else {
+                                if (requireActivity().isOnline())
+                                    requireActivity().downloadImage(it.imageUrl)
+                                else
+                                    requireActivity().showToast("check internet connection")
+
+                            }
                         }.setNegativeButton(
                             getString(R.string.no)
                         ) { dialog, _ ->
@@ -195,7 +231,16 @@ class HomeFragment : Fragment() {
                             getString(R.string.yes)
                         ) { dialog, _ ->
                             dialog.dismiss()
-                            requireActivity().downloadImage(it)
+                            if (it.imageUrl.isEmpty()) {
+                                byteToBitmap(it.bufferArray)?.let { it1 ->
+                                    requireActivity().saveMediaToStorage(
+                                        it1
+                                    )
+                                }
+                            } else {
+                                requireActivity().downloadImage(it.imageUrl)
+                            }
+
                         }.setNegativeButton(
                             getString(R.string.no)
                         ) { dialog, _ ->
@@ -213,5 +258,10 @@ class HomeFragment : Fragment() {
                 }
             }
         }
+    }
+
+    private fun byteToBitmap(b: ByteArray?): Bitmap? {
+        return if (b == null || b.size == 0) null else BitmapFactory
+            .decodeByteArray(b, 0, b.size)
     }
 }

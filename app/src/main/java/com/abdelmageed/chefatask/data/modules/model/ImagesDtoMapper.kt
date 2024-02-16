@@ -10,6 +10,6 @@ data class ImagesDtoMapper(
     val imageUrl: String,
     val title: String,
     val date: String? = null,
-    val bitmap: Bitmap? = null,
+    var bitmap: Bitmap? = null,
     var bufferArray: ByteArray? = null,
 ) : Parcelable

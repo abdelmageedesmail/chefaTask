@@ -18,7 +18,7 @@ import java.text.DateFormat
 class MarvelComicsImagesAdapter(
     private var images: MutableList<ImagesDtoMapper?> = mutableListOf(),
     private val clickListener: (ImagesDtoMapper) -> Unit,
-    private val downloadListener: (String) -> Unit
+    private val downloadListener: (ImagesDtoMapper) -> Unit
 ) : RecyclerView.Adapter<MarvelComicsImagesAdapter.JobsViewHolder>() {
     private lateinit var binding: ItemMarvelBinding
 
@@ -89,7 +89,7 @@ class MarvelComicsImagesAdapter(
                         "https"
                     )
                     Log.e("imageUrl", "${image.id}")
-                    downloadListener(imageUrl)
+                    downloadListener(image)
                     true
                 }
             }

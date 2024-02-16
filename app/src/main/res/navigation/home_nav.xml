@@ -16,7 +16,7 @@
     </fragment>
     <fragment
         android:id="@+id/imageDetails"
-        android:name="com.abdelmageed.chefatask.presentation.ImageDetails"
+        android:name="com.abdelmageed.chefatask.presentation.imageDetails.ImageDetails"
         android:label="ImageDetails"
         tools:layout="@layout/fragment_image_details">
 

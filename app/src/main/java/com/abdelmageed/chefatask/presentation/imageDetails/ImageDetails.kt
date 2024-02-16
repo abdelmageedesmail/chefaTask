@@ -1,4 +1,4 @@
-package com.abdelmageed.chefatask.presentation
+package com.abdelmageed.chefatask.presentation.imageDetails
 
 import android.Manifest
 import android.app.Activity
@@ -29,8 +29,6 @@ import com.abdelmageed.chefatask.data.modules.model.ImagesDtoMapper
 import com.abdelmageed.chefatask.databinding.FragmentImageDetailsBinding
 import com.abdelmageed.chefatask.extension.applyImage
 import com.abdelmageed.chefatask.extension.resizeImage
-import com.abdelmageed.chefatask.presentation.imageDetails.ImageDetailsState
-import com.abdelmageed.chefatask.presentation.imageDetails.ImageViewModel
 import com.abdelmageed.chefatask.utils.ImageColor.getDominantColor
 import com.abdelmageed.chefatask.utils.ImageColor.isDarkColor
 import com.bumptech.glide.Glide
@@ -91,8 +89,8 @@ class ImageDetails : Fragment() {
                     "http",
                     "https"
                 )
-                imageUrl?.let { ivImage.applyImage(it) }
                 if (image?.bufferArray?.isNotEmpty() == true) {
+                    ivImage.setImageBitmap(byteToBitmap(imageDtoModel!!.bufferArray))
                     byteToBitmap(image.bufferArray)
                     imageWidth = byteToBitmap(image.bufferArray)?.width ?: 0
                     imageHeight = byteToBitmap(image.bufferArray)?.height ?: 0
@@ -112,6 +110,7 @@ class ImageDetails : Fragment() {
                         etHeight.setTextColor(Color.WHITE)
                     }
                 } else {
+                    imageUrl?.let { ivImage.applyImage(it) }
                     Glide.with(requireActivity())
                         .asBitmap()
                         .load(imageUrl)
@@ -274,7 +273,6 @@ class ImageDetails : Fragment() {
                 Manifest.permission.READ_EXTERNAL_STORAGE
             )
         }
-
     }
 
     private val requestPermissionLauncher =
